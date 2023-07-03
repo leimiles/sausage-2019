@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/MyFeatures/TerrainBlending/Scenes/terrainBlending.unity
-    guid: 1602fab19ba92a245837f75a03e70b46
+    path: Assets/MyFeatures/AdpativeTerrain/Scenes/AdaptiveTerrain.unity
+    guid: aaa635e4cae8dc040827159fe1992a38
   m_configObjects: {}
