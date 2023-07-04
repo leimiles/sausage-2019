@@ -1,35 +1,22 @@
-#ifndef INPUT_LUXLWRP_BASE_INCLUDED
-#define INPUT_LUXLWRP_BASE_INCLUDED
+#ifndef INPUT_SKIN_V2019_INCLUDED
+#define INPUT_SKIN_V2019_INCLUDED
 
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-//  defines a bunch of helper functions (like lerpwhiteto)
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
-//  defines SurfaceData, textures and the functions Alpha, SampleAlbedoAlpha, SampleNormal, SampleEmission
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
-//  defines e.g. "DECLARE_LIGHTMAP_OR_SH"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-
-#include "../Includes/Lux LWRP Skin Lighting.hlsl"
-
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/UnityInstancing.hlsl"
+#include "./skin_v2019_lighting.hlsl"
 
-//  Material Inputs
 CBUFFER_START(UnityPerMaterial)
 
     float4 _BaseMap_ST;
     half _Smoothness;
-    half3 _SpecColor;
-
-    half _BumpScale;
-    half _Bias;
-
+    half3 _SpecularColor;
     half _OcclusionStrength;
-
     half3 _SubsurfaceColor;
     half _Curvature;
-    float2 _DistanceFade;
-
     half _TranslucencyPower;
     half _TranslucencyStrength;
     half _ShadowStrength;
@@ -37,12 +24,8 @@ CBUFFER_START(UnityPerMaterial)
 
 CBUFFER_END
 
-//  Additional textures
-TEXTURE2D(_SSSAOMap); SAMPLER(sampler_SSSAOMap);
+TEXTURE2D(MTAMap); SAMPLER(sampler_MTAMap);
 
-//  Global Inputs
-
-//  Structs
 struct VertexInput
 {
     float3 positionOS : POSITION;
@@ -50,7 +33,6 @@ struct VertexInput
     float4 tangentOS : TANGENT;
     float2 texcoord : TEXCOORD0;
     float2 lightmapUV : TEXCOORD1;
-    half4 color : COLOR;
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
@@ -58,9 +40,6 @@ struct VertexOutput
 {
     float4 positionCS : SV_POSITION;
     float2 uv : TEXCOORD0;
-
-    half fade : TEXCOORD9;
-
     #if !defined(UNITY_PASS_SHADOWCASTER) && !defined(DEPTHONLYPASS)
         DECLARE_LIGHTMAP_OR_SH(lightmapUV, vertexSH, 1);
         //#ifdef _ADDITIONAL_LIGHTS
@@ -75,16 +54,18 @@ struct VertexOutput
             half3 viewDirWS : TEXCOORD4;
         #endif
         half4 fogFactorAndVertexLight : TEXCOORD6;
+
         #ifdef _MAIN_LIGHT_SHADOWS
             float4 shadowCoord : TEXCOORD7;
         #endif
+
     #endif
 
     UNITY_VERTEX_INPUT_INSTANCE_ID
     UNITY_VERTEX_OUTPUT_STEREO
 };
 
-struct SurfaceDescription
+struct SkinSurfaceData
 {
     half3 albedo;
     half alpha;
@@ -98,5 +79,4 @@ struct SurfaceDescription
     half translucency;
     half skinMask;
 };
-
 #endif
