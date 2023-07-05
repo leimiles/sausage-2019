@@ -1,7 +1,8 @@
-#ifndef PLAYERINPUT_HLSL_INCLUDED
-#define PLAYERINPUT_HLSL_INCLUDED
+#ifndef CHICKEN_SKIN_INPUT_HLSL_INCLUDED
+#define CHICKEN_SKIN_INPUT_HLSL_INCLUDED
 
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
 
 CBUFFER_START(UnityPerMaterial)
@@ -13,6 +14,7 @@ CBUFFER_START(UnityPerMaterial)
     half4 _SpecularColor;
     half _BackScattering;
     half4 _SubSurfaceColor;
+    half _ScatteringEdge;
     half _ScatteringStrength;
     half _Smoothness;
     half _TranslucencyPower;
@@ -22,16 +24,16 @@ CBUFFER_END
 // no need, declared in surfaceinput.hlsl
 //TEXTURE2D(_BaseMap);       SAMPLER(sampler_BaseMap);
 //TEXTURE2D(_EmissionMap);       SAMPLER(sampler_EmissionMap);
-TEXTURE2D(_CEATMap);       SAMPLER(sampler_CEATMap);
+//TEXTURE2D(_CEAMap);       SAMPLER(sampler_CEAMap);
 TEXTURE2D(_SkinRampMap);       SAMPLER(sampler_SkinRampMap);
 
 struct SkinSurfaceData
 {
-    half curvature;
-    half emission_Mask;
-    half ao;
+    // half curvature;
+    // half emission_Mask;
+    // half ao;
     half thickness;
+    half sssStrength;
 };
-
 
 #endif

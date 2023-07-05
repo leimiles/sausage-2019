@@ -48,10 +48,11 @@ Material:
     - _Curvature: 0.5
     - _Distortion: 0.01
     - _OcclusionStrength: 1
-    - _ShadowStrength: 0.7
+    - _ShadowStrength: 0.583
     - _Smoothness: 0.3
-    - _TranslucencyPower: 7
-    - _TranslucencyStrength: 1
+    - _TranslucencyPower: 8
+    - _TranslucencyStrength: 0.552
     m_Colors:
+    - _BaseColor: {r: 1, g: 0.6839622, b: 0.6839622, a: 1}
     - _SpecularColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 0}
-    - _SubsurfaceColor: {r: 1, g: 0.4, b: 0.25, a: 1}
+    - _SubsurfaceColor: {r: 0.5377358, g: 0.23467083, b: 0.21052864, a: 1}

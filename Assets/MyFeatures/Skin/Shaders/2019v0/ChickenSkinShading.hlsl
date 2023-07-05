@@ -1,7 +1,7 @@
-#ifndef PLAYERSHADING_HLSL_INCLUDED
-#define PLAYERSHADING_HLSL_INCLUDED
+#ifndef CHICKEN_SKIN_SHADING_HLSL_INCLUDED
+#define CHICKEN_SKIN_SHADING_HLSL_INCLUDED
 
-#include "PlayerSkinLighting.hlsl"
+#include "ChickenSkinLighting.hlsl"
 
 struct Attributes
 {
@@ -21,28 +21,8 @@ struct Varyings
     float4 shadowCoord : TEXCOORD4;
     half4 vertexLightAndFog : TEXCOORD5;
     half3 sh : COLOR0;
+    UNITY_VERTEX_INPUT_INSTANCE_ID
 };
-
-bool IsPerspectiveProjection()
-{
-    return (unity_OrthoParams.w == 0);
-}
-
-half3 GetWorldSpaceNormalizeViewDir(float3 positionWS)
-{
-    if (IsPerspectiveProjection())
-    {
-        // Perspective
-        float3 V = _WorldSpaceCameraPos.xyz - positionWS;
-        return half3(normalize(V));
-    }
-    else
-    {
-        // Orthographic
-        float4x4 viewMat = UNITY_MATRIX_V;
-        return -viewMat[2].xyz;
-    }
-}
 
 Varyings vert(Attributes v)
 {
@@ -57,7 +37,7 @@ Varyings vert(Attributes v)
     VertexNormalInputs vni = GetVertexNormalInputs(v.normalOS);
     o.normalWS = vni.normalWS;
     // view
-    o.viewDirWS = SafeNormalize(GetWorldSpaceNormalizeViewDir(vpi.positionWS));
+    o.viewDirWS = GetCameraPositionWS() - vpi.positionWS;
     // shadow
     //o.shadowCoord = TransformWorldToShadowCoord(vpi.positionWS);
     vpi.positionWS += vni.normalWS.xyz * _SkinShadowSampleBias;
@@ -77,8 +57,14 @@ void InitializeInputData(Varyings input, out InputData inputData)
     inputData.positionWS = input.positionWS;
     //inputData.positionCS = input.positionCS;
     inputData.normalWS = SafeNormalize(input.normalWS);
-    inputData.viewDirectionWS = input.viewDirWS;
-    inputData.shadowCoord = input.shadowCoord;
+    inputData.viewDirectionWS = SafeNormalize(input.viewDirWS);
+    #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
+        inputData.shadowCoord = input.shadowCoord;
+    #elif defined(MAIN_LIGHT_CALCULATE_SHADOWS)
+        inputData.shadowCoord = TransformWorldToShadowCoord(inputData.positionWS);
+    #else
+        inputData.shadowCoord = float4(0, 0, 0, 0);
+    #endif
     inputData.fogCoord = input.vertexLightAndFog.w;
     inputData.vertexLighting = input.vertexLightAndFog.rgb;
     inputData.bakedGI = input.sh;
@@ -91,73 +77,44 @@ void InitializeInputData(Varyings input, out InputData inputData)
 void InitializeSkinSurfaceData(float2 uv, out SurfaceData surfaceData, out SkinSurfaceData skinSurfaceData)
 {
     surfaceData = (SurfaceData)0;
-    surfaceData.albedo = SampleAlbedoAlpha(uv, TEXTURE2D_ARGS(_BaseMap, sampler_BaseMap)).rgb * _BaseColor.rgb;
+    half4 baseMap = SampleAlbedoAlpha(uv, TEXTURE2D_ARGS(_BaseMap, sampler_BaseMap));
+    surfaceData.alpha = _BaseColor.a;
+    surfaceData.albedo = baseMap.rgb * _BaseColor;
     // no need surface ao
     surfaceData.occlusion = half(1.0);
-    // no need clear coat
-    //surfaceData.clearCoatSmoothness = half(0.0);
-    //surfaceData.clearCoatMask = half(0.0);
     // constant smoothness for skin
     surfaceData.smoothness = _Smoothness;
-    surfaceData.specular = _SpecularColor.rgb;
+    surfaceData.metallic = 0.0;
+    surfaceData.specular = half3(0.0, 0.0, 0.0);
+    //surfaceData.specular = _SpecularColor.rgb;
 
     skinSurfaceData = (SkinSurfaceData)0;
-    half4 CEAT_Color = SAMPLE_TEXTURE2D(_CEATMap, sampler_CEATMap, uv);
-    skinSurfaceData.curvature = CEAT_Color.r;
-    skinSurfaceData.emission_Mask = CEAT_Color.g;
-    skinSurfaceData.ao = CEAT_Color.b;
-    skinSurfaceData.thickness = CEAT_Color.a * _ScatteringStrength;
-}
-/*
-inline float GammaToLinearSpaceExact(float value)
-{
-    if (value <= 0.04045F)
-        return value / 12.92F;
-    else if (value < 1.0F)
-        return pow((value + 0.055F) / 1.055F, 2.4F);
-    else
-        return pow(value, 2.2F);
+    skinSurfaceData.thickness = baseMap.a;
+    skinSurfaceData.sssStrength = _ScatteringStrength;
 }
 
-inline half3 GammaToLinearSpace(half3 sRGB)
+inline half3 LinearToGammaSpace(half3 linRGB)
 {
-    return sRGB * (sRGB * (sRGB * 0.305306011h + 0.682171111h) + 0.012522878h);
+    linRGB = max(linRGB, half3(0.h, 0.h, 0.h));
+    return max(1.055h * pow(linRGB, 0.416666667h) - 0.055h, 0.h);
 }
-
-inline float LinearToGammaSpaceExact(float value)
-{
-    if (value <= 0.0F)
-        return 0.0F;
-    else if (value <= 0.0031308F)
-        return 12.92F * value;
-    else if (value < 1.0F)
-        return 1.055F * pow(value, 0.4166667F) - 0.055F;
-    else
-        return pow(value, 0.45454545F);
-}
-*/
 
 half4 frag(Varyings input) : SV_Target
 {
-    half4 baseColor = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv0);
-    //return baseColor;
-    //return half4(0, 1, 0, 1);
-    //return half4(LinearToGammaSpace(input.normalWS.rgb), 1);
-
     InputData inputData;
     InitializeInputData(input, inputData);
-
-    //return half4(LinearToGammaSpace(input.shadowCoord.xyz), 1);
-    //return half4(input.shadowCoord.xyz, 1);
-
     SurfaceData surfaceData;
     SkinSurfaceData skinSurfaceData;
     InitializeSkinSurfaceData(input.uv0, surfaceData, skinSurfaceData);
     half3 diffuseNormalWS = NormalizeNormalPerPixel(input.normalWS);
 
-    //AmbientOcclusionFactor ao = CreateAmbientOcclusionFactor(inputData.normalizedScreenSpaceUV, surfaceData.occlusion);
-    //return half4(ao.indirectAmbientOcclusion, ao.indirectAmbientOcclusion, ao.indirectAmbientOcclusion, 1.0) * baseColor;
     half4 color = SkinPBR(inputData, surfaceData, skinSurfaceData, _SubSurfaceColor, diffuseNormalWS, _SpecularAO, _BackScattering);
+
+    color.rgb = LinearToGammaSpace(color.rgb);
+    color.rgb = MixFog(color.rgb, inputData.fogCoord);
+
+    // Gamma
+    //color = pow(color, 0.45);
 
     return color;
 }

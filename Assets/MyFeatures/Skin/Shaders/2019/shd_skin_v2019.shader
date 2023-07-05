@@ -2,15 +2,16 @@
 {
     Properties
     {
+        _BaseColor ("Base Color", Color) = (1.0, 0.68, 0.68, 1.0)
         _BaseMap ("Base Map", 2D) = "white" { }
         [NoScaleOffset] MTAMap ("Mask (R) Thickness (G) Occlusion (B)", 2D) = "white" { }
-        _Smoothness ("Smoothness", Range(0.0, 1.0)) = 0.3
+        _Smoothness ("Smoothness", Range(0.0, 1.0)) = 0.5
         _OcclusionStrength ("Occlusion Strength", Range(0.0, 1.0)) = 1.0
-        _SpecularColor ("Specular Color", Color) = (0.2, 0.2, 0.2, 0)
+        _SpecularColor ("Specular Color", Color) = (0.0, 0.0, 0.0, 0)
         _Curvature ("Curvature", Range(0.0, 1.0)) = 0.5
-        _SubsurfaceColor ("Subsurface Color", Color) = (1.0, 0.4, 0.25, 1.0)
-        _TranslucencyPower ("Transmission Power", Range(0.0, 10.0)) = 7.0
-        _TranslucencyStrength ("Transmission Strength", Range(0.0, 1.0)) = 1.0
+        _SubsurfaceColor ("Subsurface Color", Color) = (1.0, 0.18, 0.18, 1.0)
+        _TranslucencyPower ("Transmission Power", Range(0.0, 10.0)) = 8.0
+        _TranslucencyStrength ("Transmission Strength", Range(0.0, 1.0)) = 0.55
         _ShadowStrength ("Shadow Strength", Range(0.0, 1.0)) = 0.7
         _Distortion ("Transmission Distortion", Range(0.0, 0.1)) = 0.01
         [NoScaleOffset] _SkinRamp ("Skin Ramp", 2D) = "white" { }
@@ -81,7 +82,7 @@
             {
                 half4 albedoAlpha = SampleAlbedoAlpha(uv, TEXTURE2D_ARGS(_BaseMap, sampler_BaseMap));
                 outSurfaceData.alpha = 1;
-                outSurfaceData.albedo = albedoAlpha.rgb;
+                outSurfaceData.albedo = albedoAlpha.rgb * _BaseColor.rgb;
                 outSurfaceData.metallic = 0;
                 outSurfaceData.specular = _SpecularColor;
                 outSurfaceData.normalTS = half3(0, 0, 1);
@@ -136,7 +137,7 @@
             }
             ENDHLSL
         }
-
+        /*
         Pass
         {
             Name "ShadowCaster"
@@ -211,5 +212,6 @@
 
             ENDHLSL
         }
+        */
     }
 }

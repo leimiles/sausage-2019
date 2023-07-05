@@ -12,6 +12,7 @@
 CBUFFER_START(UnityPerMaterial)
 
     float4 _BaseMap_ST;
+    half4 _BaseColor;
     half _Smoothness;
     half3 _SpecularColor;
     half _OcclusionStrength;

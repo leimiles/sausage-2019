@@ -1,5 +1,5 @@
-#ifndef PLAYERSHADOWCASTER_HLSL_INCLUDED
-#define PLAYERSHADOWCASTER_HLSL_INCLUDED
+#ifndef CHICKEN_SKIN_SHADOWCASTER_HLSL_INCLUDED
+#define CHICKEN_SKIN_SHADOWCASTER_HLSL_INCLUDED
 
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 
