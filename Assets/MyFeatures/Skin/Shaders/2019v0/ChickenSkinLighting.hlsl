@@ -48,6 +48,8 @@ half4 SkinPBR(InputData inputData, SurfaceData surfaceData, SkinSurfaceData skin
     Light mainLight = GetMainLight(inputData.shadowCoord);
     MixRealtimeAndBakedGI(mainLight, inputData.normalWS, inputData.bakedGI, half4(0, 0, 0, 0));
 
+    //return half4(mainLight.shadowAttenuation, mainLight.shadowAttenuation, mainLight.shadowAttenuation, 1);
+
     half ndotv = pow(1 - saturate(dot(inputData.normalWS, inputData.viewDirectionWS)), _ScatteringEdge);
 
     half3 giColor = GlobalIllumination_Skin(brdfData, inputData.bakedGI, surfaceData.occlusion, inputData.normalWS, inputData.viewDirectionWS, specularAO);

@@ -45,7 +45,7 @@
             #include "./ChickenSkinShading.hlsl"
             ENDHLSL
         }
-        /*
+
         Pass
         {
             Name "ShadowCaster"
@@ -80,6 +80,6 @@
 
             ENDHLSL
         }
-        */
+
     }
 }

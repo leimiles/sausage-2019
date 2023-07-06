@@ -5,14 +5,15 @@
         _BaseColor ("Base Color", Color) = (1.0, 0.68, 0.68, 1.0)
         _BaseMap ("Base Map", 2D) = "white" { }
         [NoScaleOffset] MTAMap ("Mask (R) Thickness (G) Occlusion (B)", 2D) = "white" { }
-        _Smoothness ("Smoothness", Range(0.0, 1.0)) = 0.5
+        _SmoothnessMap ("Smoothness Map", 2D) = "white" { }
+        _Smoothness ("Smoothness", Range(0.0, 1.0)) = 0.45
         _OcclusionStrength ("Occlusion Strength", Range(0.0, 1.0)) = 1.0
         _SpecularColor ("Specular Color", Color) = (0.0, 0.0, 0.0, 0)
         _Curvature ("Curvature", Range(0.0, 1.0)) = 0.5
         _SubsurfaceColor ("Subsurface Color", Color) = (1.0, 0.18, 0.18, 1.0)
-        _TranslucencyPower ("Transmission Power", Range(0.0, 10.0)) = 8.0
-        _TranslucencyStrength ("Transmission Strength", Range(0.0, 1.0)) = 0.55
-        _ShadowStrength ("Shadow Strength", Range(0.0, 1.0)) = 0.7
+        _TranslucencyPower ("Transmission Power", Range(0.0, 10.0)) = 8
+        _TranslucencyStrength ("Transmission Strength", Range(0.0, 1.0)) = 0.2
+        _ShadowStrength ("Shadow Strength", Range(0.0, 1.0)) = 0.9
         _Distortion ("Transmission Distortion", Range(0.0, 0.1)) = 0.01
         [NoScaleOffset] _SkinRamp ("Skin Ramp", 2D) = "white" { }
     }
@@ -29,8 +30,7 @@
             //#define _SPECULAR_SETUP 1
             #pragma shader_feature _SPECULAR_SETUP
             #pragma shader_feature _NORMALMAP
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
             #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
             #pragma multi_compile _ _SHADOWS_SOFT
@@ -92,7 +92,8 @@
                 outSurfaceData.translucency = mask_thickness_ao.g;
                 outSurfaceData.skinMask = mask_thickness_ao.r;
                 outSurfaceData.occlusion = lerp(1.0h, mask_thickness_ao.a, _OcclusionStrength);
-                outSurfaceData.smoothness = albedoAlpha.a * _Smoothness;
+                half smoothnessMapValue = SAMPLE_TEXTURE2D(_SmoothnessMap, sampler_SmoothnessMap, uv * _SmoothnessMap_ST.xy).r;
+                outSurfaceData.smoothness = albedoAlpha.a * _Smoothness * smoothnessMapValue;
                 outSurfaceData.emission = 0;
             }
 
@@ -136,13 +137,13 @@
 
                 half3 normalWS;
                 normalWS = input.normalWS;
-                
+
                 //return half4(skinSurfaceData.albedo, 1);
 
                 half4 color = CalculateSkinColor(inputData, skinSurfaceData.albedo, skinSurfaceData.metallic, skinSurfaceData.specular, skinSurfaceData.smoothness, skinSurfaceData.occlusion, skinSurfaceData.emission, skinSurfaceData.alpha,
                 half4(_TranslucencyStrength * skinSurfaceData.translucency, _TranslucencyPower, _ShadowStrength, _Distortion), 1, normalWS, _SubsurfaceColor,
                 lerp(skinSurfaceData.translucency, 1, _Curvature), skinSurfaceData.skinMask);
-                
+
                 return color;
 
                 color.rgb = MixFog(color.rgb, inputData.fogCoord);
@@ -150,7 +151,7 @@
             }
             ENDHLSL
         }
-        /*
+
         Pass
         {
             Name "ShadowCaster"
@@ -160,6 +161,7 @@
             #pragma exclude_renderers gles gles3 glcore
             #pragma target 4.5
             #pragma multi_compile_instancing
+
             #include "./skin_v2019_input.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
             #pragma vertex ShadowPassVertex
@@ -191,7 +193,7 @@
             }
             ENDHLSL
         }
-
+        /*
         Pass
         {
             Tags { "LightMode" = "DepthOnly" }

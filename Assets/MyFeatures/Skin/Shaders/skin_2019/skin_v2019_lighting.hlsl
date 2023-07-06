@@ -59,6 +59,8 @@ half4 CalculateSkinColor(InputData inputData, half3 albedo, half metallic, half3
     Light mainLight = GetMainLight(inputData.shadowCoord);
     MixRealtimeAndBakedGI(mainLight, inputData.normalWS, inputData.bakedGI, half4(0, 0, 0, 0));
 
+    //return half4(mainLight.shadowAttenuation, mainLight.shadowAttenuation, mainLight.shadowAttenuation, 1);
+
     half3 color = GlobalIllumination_Skin(brdfData, inputData.bakedGI, occlusion, inputData.normalWS, inputData.viewDirectionWS, AmbientReflection);
 
     half NdotLUnclamped = dot(diffuseNormalWS, mainLight.direction);

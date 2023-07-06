@@ -12,6 +12,7 @@
 CBUFFER_START(UnityPerMaterial)
 
     float4 _BaseMap_ST;
+    float4 _SmoothnessMap_ST;
     half4 _BaseColor;
     half _Smoothness;
     half3 _SpecularColor;
@@ -26,6 +27,7 @@ CBUFFER_START(UnityPerMaterial)
 CBUFFER_END
 
 TEXTURE2D(MTAMap); SAMPLER(sampler_MTAMap);
+TEXTURE2D(_SmoothnessMap); SAMPLER(sampler_SmoothnessMap);
 
 struct VertexInput
 {
