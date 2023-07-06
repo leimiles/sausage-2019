@@ -31,9 +31,7 @@ struct VertexInput
 {
     float3 positionOS : POSITION;
     float3 normalOS : NORMAL;
-    float4 tangentOS : TANGENT;
     float2 texcoord : TEXCOORD0;
-    float2 lightmapUV : TEXCOORD1;
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 

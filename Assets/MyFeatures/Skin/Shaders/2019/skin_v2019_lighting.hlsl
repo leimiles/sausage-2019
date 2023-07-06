@@ -53,6 +53,8 @@ half4 CalculateSkinColor(InputData inputData, half3 albedo, half metallic, half3
 {
     BRDFData brdfData;
     InitializeBRDFData(albedo, metallic, specular, smoothness, alpha, brdfData);
+    //return half4(albedo, 1);
+    //return half4(brdfData.roughness, brdfData.roughness2, brdfData.perceptualRoughness, 1);
 
     Light mainLight = GetMainLight(inputData.shadowCoord);
     MixRealtimeAndBakedGI(mainLight, inputData.normalWS, inputData.bakedGI, half4(0, 0, 0, 0));

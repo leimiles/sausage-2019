@@ -42,6 +42,8 @@ half4 SkinPBR(InputData inputData, SurfaceData surfaceData, SkinSurfaceData skin
 {
     BRDFData brdfData;
     InitializeBRDFData(surfaceData.albedo, surfaceData.metallic, surfaceData.specular, surfaceData.smoothness, surfaceData.alpha, brdfData);
+    //return half4(surfaceData.albedo, 1);
+    //return half4(brdfData.roughness, brdfData.roughness2, brdfData.perceptualRoughness, 1);
 
     Light mainLight = GetMainLight(inputData.shadowCoord);
     MixRealtimeAndBakedGI(mainLight, inputData.normalWS, inputData.bakedGI, half4(0, 0, 0, 0));
@@ -49,6 +51,7 @@ half4 SkinPBR(InputData inputData, SurfaceData surfaceData, SkinSurfaceData skin
     half ndotv = pow(1 - saturate(dot(inputData.normalWS, inputData.viewDirectionWS)), _ScatteringEdge);
 
     half3 giColor = GlobalIllumination_Skin(brdfData, inputData.bakedGI, surfaceData.occlusion, inputData.normalWS, inputData.viewDirectionWS, specularAO);
+
     // add back scatterring
     half3 backColor = backScattering * SampleSH(-diffuseNormalWS) * surfaceData.albedo * surfaceData.occlusion * skinSurfaceData.sssStrength * skinSurfaceData.thickness * subSurfaceColor * ndotv;
     giColor += backColor;

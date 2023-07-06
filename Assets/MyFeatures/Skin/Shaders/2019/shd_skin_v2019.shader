@@ -26,7 +26,8 @@
             HLSLPROGRAM
             #pragma exclude_renderers gles gles3 glcore
             #pragma target 4.5
-            #define _SPECULAR_SETUP 1
+            //#define _SPECULAR_SETUP 1
+            #pragma shader_feature _SPECULAR_SETUP
             #pragma shader_feature _NORMALMAP
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
@@ -51,7 +52,7 @@
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_TRANSFER_INSTANCE_ID(input, output);
                 VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
-                VertexNormalInputs normalInput = GetVertexNormalInputs(input.normalOS, input.tangentOS);
+                VertexNormalInputs normalInput = GetVertexNormalInputs(input.normalOS);
 
                 half3 viewDirWS = GetCameraPositionWS() - vertexInput.positionWS;
                 half3 vertexLight = VertexLighting(vertexInput.positionWS, normalInput.normalWS);
@@ -123,15 +124,27 @@
             {
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+
+                //return _BaseColor;
+
                 SkinSurfaceData skinSurfaceData;
                 InitializeSkinSurfaceData(input.uv.xy, skinSurfaceData);
                 InputData inputData;
                 InitializeInputData(input, skinSurfaceData.normalTS, inputData);
+
+                //return half4(skinSurfaceData.albedo, 1);
+
                 half3 normalWS;
                 normalWS = input.normalWS;
+                
+                //return half4(skinSurfaceData.albedo, 1);
+
                 half4 color = CalculateSkinColor(inputData, skinSurfaceData.albedo, skinSurfaceData.metallic, skinSurfaceData.specular, skinSurfaceData.smoothness, skinSurfaceData.occlusion, skinSurfaceData.emission, skinSurfaceData.alpha,
                 half4(_TranslucencyStrength * skinSurfaceData.translucency, _TranslucencyPower, _ShadowStrength, _Distortion), 1, normalWS, _SubsurfaceColor,
                 lerp(skinSurfaceData.translucency, 1, _Curvature), skinSurfaceData.skinMask);
+                
+                return color;
+
                 color.rgb = MixFog(color.rgb, inputData.fogCoord);
                 return color;
             }

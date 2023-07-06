@@ -103,12 +103,21 @@ half4 frag(Varyings input) : SV_Target
 {
     InputData inputData;
     InitializeInputData(input, inputData);
+
+    //return _BaseColor;
     SurfaceData surfaceData;
     SkinSurfaceData skinSurfaceData;
     InitializeSkinSurfaceData(input.uv0, surfaceData, skinSurfaceData);
+
+    //return half4(surfaceData.albedo, 1);
+
     half3 diffuseNormalWS = NormalizeNormalPerPixel(input.normalWS);
 
     half4 color = SkinPBR(inputData, surfaceData, skinSurfaceData, _SubSurfaceColor, diffuseNormalWS, _SpecularAO, _BackScattering);
+    
+    return color;
+
+    return half4(surfaceData.albedo, 1);
 
     color.rgb = LinearToGammaSpace(color.rgb);
     color.rgb = MixFog(color.rgb, inputData.fogCoord);
