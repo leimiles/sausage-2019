@@ -136,7 +136,7 @@
                 //return half4(skinSurfaceData.albedo, 1);
 
                 half3 normalWS;
-                normalWS = input.normalWS;
+                normalWS = input.normalWS.xyz;
 
                 //return half4(skinSurfaceData.albedo, 1);
 
