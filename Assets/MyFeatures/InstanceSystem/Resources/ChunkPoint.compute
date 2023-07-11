@@ -1,0 +1,21 @@
+﻿#pragma kernel InitializePositionPerChunk
+
+struct InstanceData
+{
+    float4 position;
+};
+
+RWStructuredBuffer<InstanceData> _InstanceDataBuffer;
+int _Dimension, _Scale, _OffsetX, _OffsetY, _NumChunks, _ChunkDimension;
+
+[numthreads(8, 8, 1)]
+void InitializePositionPerChunk(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x < uint(_ChunkDimension) && id.y < uint(_ChunkDimension))
+    {
+        InstanceData instanceData;
+        float4 position = float4(0.0f, 0.0f, 0.0f, 1.0f);
+        instanceData.position = position;
+        _InstanceDataBuffer[id.x * id.y * _ChunkDimension] = instanceData;
+    }
+}

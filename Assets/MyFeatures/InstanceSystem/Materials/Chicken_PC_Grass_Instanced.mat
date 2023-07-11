@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Chicken_PC_Grass_Instanced
+  m_Shader: {fileID: 4800000, guid: 2323e8b78ff67e945adbddf531e77eb4, type: 3}
+  m_ShaderKeywords: _USE_FOUR
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _NoiseDetailTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainColor:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ActOffset: 1
+    - _ActRadius: 1
+    - _ActStrength: 1
+    - _AttenBias: 0.5
+    - _LightStrength: 0.5
+    - _USE_FOUR: 1
+    - _VerticalBillboarding: 0
+    - _WaveFrequency: 0.5
+    - _WaveStrength: 1
+    - _WindFrequency: 0.5
+    - _WindStrength: 1
+    m_Colors:
+    - _BlendRatio: {r: 0.2, g: 0.8, b: 0, a: 0}
+    - _ColorMiddle: {r: 0, g: 1, b: 0.10661459, a: 1}
+    - _ColorUp: {r: 1, g: 0, b: 0, a: 1}
+    - _WPosST: {r: 1, g: 1, b: 0, a: 0}
+    - _WindVector: {r: 1, g: 1, b: 1, a: 1}
