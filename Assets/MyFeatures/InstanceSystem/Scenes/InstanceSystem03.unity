@@ -295,7 +295,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &207687403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,18 +308,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a16c287e036e2d4faf7ae12dbfb8e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fieldSize: 1000
+  fieldSize: 600
   chunkDensity: 1
-  numChunks: 20
+  numChunks: 10
   displacementStrength: 1
-  distanceCutoff: 200
+  distanceCutoff: 150
   lodCutoff: 60
   heightMap: {fileID: 2800000, guid: 3ee09eb4b10e19a43a8c716fafccdbd7, type: 3}
-  grassMesh: {fileID: -6117462280485073603, guid: bf408f00d79ceff4085d32d01c6b90ba,
+  grassMesh: {fileID: -6117462280485073603, guid: 93c9b35f65dd56346b9307ea3c2fa504,
     type: 3}
-  grassMeshLOD: {fileID: 2922978815431692281, guid: bf408f00d79ceff4085d32d01c6b90ba,
+  grassMeshLOD: {fileID: 2922978815431692281, guid: 93c9b35f65dd56346b9307ea3c2fa504,
     type: 3}
   grassMaterial: {fileID: 2100000, guid: 4e346a82373da4044813472aa6ecd373, type: 2}
+  camera: {fileID: 432878520}
 --- !u!4 &207687404
 Transform:
   m_ObjectHideFlags: 0
@@ -917,7 +918,7 @@ PrefabInstance:
     - target: {fileID: 1768259586595402192, guid: 6f02204039fad8647ac057f30540ca22,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2531827434956570697, guid: 6f02204039fad8647ac057f30540ca22,
         type: 3}
@@ -1102,7 +1103,7 @@ PrefabInstance:
     - target: {fileID: 1768259586595402192, guid: 6f02204039fad8647ac057f30540ca22,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2531827434956570697, guid: 6f02204039fad8647ac057f30540ca22,
         type: 3}
@@ -1314,7 +1315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1107283909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1327,15 +1328,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1d70d15874c1f04891dd75b55b83502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grassMesh: {fileID: -6117462280485073603, guid: bf408f00d79ceff4085d32d01c6b90ba,
+  grassMesh: {fileID: -6117462280485073603, guid: 93c9b35f65dd56346b9307ea3c2fa504,
     type: 3}
-  grassMeshLOD: {fileID: 2922978815431692281, guid: bf408f00d79ceff4085d32d01c6b90ba,
+  grassMeshLOD: {fileID: 2922978815431692281, guid: 93c9b35f65dd56346b9307ea3c2fa504,
     type: 3}
   grassMaterial: {fileID: 2100000, guid: 88c4b550392ba4b4baaa7b704d1f088b, type: 2}
-  fieldSize: 1000
+  fieldSize: 600
   chunkDensity: 1
-  numChunks: 20
-  distanceCutoff: 200
+  numChunks: 10
+  distanceCutoff: 150
   lodCutoff: 60
   camera: {fileID: 432878520}
 --- !u!4 &1107283910
@@ -1514,7 +1515,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1465329577
 Transform:
   m_ObjectHideFlags: 0

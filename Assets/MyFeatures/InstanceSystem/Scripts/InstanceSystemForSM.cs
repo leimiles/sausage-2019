@@ -89,6 +89,100 @@ public class InstanceSystemForSM {
         cullShader = Resources.Load<ComputeShader>("CullInstance");
     }
 
+    static List<Matrix4x4> transforms = new List<Matrix4x4>();
+    static List<Tile> tiles = new List<Tile>();
+
+    public class Tile {
+        public int startIndex;
+        public int count;
+    }
+
+    public static void AddTileBuffer(List<Matrix4x4> transforms) {
+    }
+    public static void RemoveTileBuffer(Tile tile) {
+
+    }
+
+    void InitializeComputeShaders2() {
+        chunkPointShader = Resources.Load<ComputeShader>("ChunkPoint");
+        chunkPointShader.SetInt(Shader.PropertyToID("_Dimension"), fieldSize);
+        chunkPointShader.SetInt(Shader.PropertyToID("_ChunkDimension"), chunkDimension);
+        chunkPointShader.SetInt(Shader.PropertyToID("_Scale"), chunkDensity);
+        chunkPointShader.SetInt(Shader.PropertyToID("_NumChunks"), numChunks);
+
+        voteBuffer = new ComputeBuffer(numInstancesPerChunk, 4);
+        scanBuffer = new ComputeBuffer(numInstancesPerChunk, 4);
+        groupSumArrayBuffer = new ComputeBuffer(numThreadGroups, 4);
+        scannedGroupSumBuffer = new ComputeBuffer(numThreadGroups, 4);
+
+        cullShader = Resources.Load<ComputeShader>("CullInstance");
+    }
+
+    void InitializeChunks2() {
+        chunks = new Chunk[numChunks * numChunks];
+        for (int x = 0; x < numChunks; ++x) {
+            for (int y = 0; y < numChunks; ++y) {
+                int index = x + y * numChunks;
+                chunks[index] = InitializeChunk2(x, y);
+            }
+        }
+    }
+
+    Chunk InitializeChunk2(int offsetX, int offsetY) {
+        Chunk chunk = new Chunk();
+        chunk.argsBuffer = new ComputeBuffer(1, 5 * sizeof(uint), ComputeBufferType.IndirectArguments);
+        chunk.argsBufferLOD = new ComputeBuffer(1, 5 * sizeof(uint), ComputeBufferType.IndirectArguments);
+        chunk.argsBuffer.SetData(args);
+        chunk.argsBufferLOD.SetData(argsLOD);
+        chunk.positionsBuffer = new ComputeBuffer(numInstancesPerChunk, SizeOf(typeof(InstanceData)));
+        chunk.culledPositionsBuffer = new ComputeBuffer(numInstancesPerChunk, SizeOf(typeof(InstanceData)));
+        int chunkDim = Mathf.CeilToInt(fieldSize / numChunks);
+        Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
+        center.y = 0.0f;
+        center.x = -(chunkDim * 0.5f * numChunks) + chunkDim * offsetX;
+        center.z = -(chunkDim * 0.5f * numChunks) + chunkDim * offsetY;
+        center.x += chunkDim * 0.5f;
+        center.z += chunkDim * 0.5f;
+        chunk.bounds = new Bounds(center, new Vector3(-chunkDim, 10.0f, chunkDim));
+        chunkPointShader.SetInt(Shader.PropertyToID("_OffsetX"), offsetX);
+        chunkPointShader.SetInt(Shader.PropertyToID("_OffsetY"), offsetY);
+        chunkPointShader.SetBuffer(0, Shader.PropertyToID("_InstanceDataBuffer"), chunk.positionsBuffer);
+        int threadGroups = Mathf.CeilToInt(fieldSize / numChunks) * chunkDensity;
+        chunkPointShader.Dispatch(0, threadGroups, threadGroups, 1);
+
+        return chunk;
+    }
+
+    void InitArgs2() {
+        numInstancesPerChunk = 0;
+        chunkDimension = numInstancesPerChunk;
+        numInstancesPerChunk *= numInstancesPerChunk;
+        numThreadGroups = Mathf.CeilToInt(numInstancesPerChunk / 128.0f);
+        if (numThreadGroups > 128) {
+            int powerOf2 = 128;
+            while (powerOf2 < numThreadGroups) {
+                powerOf2 *= 2;
+            }
+            numThreadGroups = powerOf2;
+        } else {
+            while (128 % numThreadGroups != 0) {
+                numThreadGroups++;
+            }
+        }
+        numVoteThreadGroups = Mathf.CeilToInt(numInstancesPerChunk / 128.0f);
+        numGroupScanThreadGroups = Mathf.CeilToInt(numInstancesPerChunk / 1024.0f);
+        args = new uint[5] { 0, 0, 0, 0, 0 };
+        args[0] = (uint)instancedMesh.GetIndexCount(0);
+        args[1] = (uint)0;
+        args[2] = (uint)instancedMesh.GetIndexStart(0);
+        args[3] = (uint)instancedMesh.GetBaseVertex(0);
+        argsLOD = new uint[5] { 0, 0, 0, 0, 0 };
+        argsLOD[0] = (uint)instancedMeshLOD.GetIndexCount(0);
+        args[1] = (uint)0;
+        args[2] = (uint)instancedMeshLOD.GetIndexStart(0);
+        args[3] = (uint)instancedMeshLOD.GetBaseVertex(0);
+    }
+
     void InitArgs() {
         numInstancesPerChunk = Mathf.CeilToInt(fieldSize / numChunks) * chunkDensity;
         chunkDimension = numInstancesPerChunk;
