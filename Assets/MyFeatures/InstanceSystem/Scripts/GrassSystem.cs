@@ -24,6 +24,7 @@ public class GrassSystem : MonoBehaviour {
     // instanced mesh for LOD
     public Mesh grassMeshLOD;
     public Material grassMaterial;
+    public new Camera camera;
     void OnEnable() {
         instanceSystem = new InstanceSystem(
             grassMesh,
@@ -38,7 +39,7 @@ public class GrassSystem : MonoBehaviour {
     }
 
     void Update() {
-        instanceSystem.DrawInstances(Camera.main, distanceCutoff, lodCutoff);
+        instanceSystem.DrawInstances(camera, distanceCutoff, lodCutoff);
     }
 
     void OnDisable() {

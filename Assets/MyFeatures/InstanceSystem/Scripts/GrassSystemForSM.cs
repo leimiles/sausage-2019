@@ -32,9 +32,9 @@ public class GrassSystemForSM : MonoBehaviour {
 
     }
     void Update() {
-        if (instanceSystemForSM != null) {
-            instanceSystemForSM.DrawInstances(camera, distanceCutoff, lodCutoff);
-        }
+
+        instanceSystemForSM.DrawInstances(camera, distanceCutoff, lodCutoff);
+
     }
 
     void OnDisable() {

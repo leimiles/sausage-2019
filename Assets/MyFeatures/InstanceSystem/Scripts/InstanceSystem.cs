@@ -213,7 +213,7 @@ public class InstanceSystem {
         for (int i = 0; i < numChunks * numChunks; ++i) {
             float distance = Vector3.Distance(camera.transform.position, chunks[i].bounds.center);
             bool noLOD = distance < lodCutoff;
-            Cull(chunks[i], vp, distanceCutoff, noLOD);
+            Cull(chunks[i], vp, distanceCutoff, noLOD, camera.transform.position);
             if (noLOD) {
                 Graphics.DrawMeshInstancedIndirect(instancedMesh, 0, chunks[i].material, fieldBounds, chunks[i].argsBuffer);
             } else {
@@ -232,7 +232,7 @@ public class InstanceSystem {
         }
     }
 
-    void Cull(Chunk chunk, Matrix4x4 vp, float distanceCutoff, bool noLOD) {
+    void Cull(Chunk chunk, Matrix4x4 vp, float distanceCutoff, bool noLOD, Vector3 cameraPosition) {
         if (noLOD) {
             chunk.argsBuffer.SetData(args);
         } else {
@@ -242,7 +242,7 @@ public class InstanceSystem {
         cullShader.SetMatrix(Shader.PropertyToID("MATRIX_VP"), vp);
         cullShader.SetBuffer(0, Shader.PropertyToID("_GrassDataBuffer"), chunk.positionsBuffer);
         cullShader.SetBuffer(0, Shader.PropertyToID("_VoteBuffer"), voteBuffer);
-        cullShader.SetVector(Shader.PropertyToID("_CameraPosition"), Camera.main.transform.position);
+        cullShader.SetVector(Shader.PropertyToID("_CameraPosition"), cameraPosition);
         cullShader.SetFloat(Shader.PropertyToID("_Distance"), distanceCutoff);
         cullShader.Dispatch(0, numVoteThreadGroups, 1, 1);
 
