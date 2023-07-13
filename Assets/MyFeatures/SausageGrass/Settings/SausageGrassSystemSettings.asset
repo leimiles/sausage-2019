@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa4bcf3cdd2f3af4089903f88d4d0ace, type: 3}
+  m_Name: SausageGrassSystemSettings
+  m_EditorClassIdentifier: 
+  computeShader: {fileID: 7200000, guid: 5d9c7189b1954fd468dc010a7c461a2d, type: 3}
+  material: {fileID: 2100000, guid: b1c8716c12160bb4b9d0b27905d13364, type: 2}
+  maxBladesPerVertex: 4
+  maxSegmentsPerBlade: 3
+  MinWidth: 0.2
+  MaxWidth: 0.2
+  MinHeight: 0.2
+  MaxHeight: 0.2
