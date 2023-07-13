@@ -40,7 +40,7 @@ Material:
     - _Distortion: 0.01
     - _OcclusionStrength: 1
     - _ShadowStrength: 0.9
-    - _Smoothness: 0.45
+    - _Smoothness: 0.7
     - _TranslucencyPower: 8
     - _TranslucencyStrength: 0.2
     m_Colors:

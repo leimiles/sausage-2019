@@ -268,7 +268,7 @@ public class GrassComputeScript : MonoBehaviour {
             return;
         }
         cameraOriginalFarPlane = m_MainCamera.farClipPlane;
-        m_MainCamera.farClipPlane = currentPresets.maxDrawDistance;//allow drawDistance control    
+        m_MainCamera.farClipPlane = currentPresets.maxDrawDistance;//allow drawDistance control
         GeometryUtility.CalculateFrustumPlanes(m_MainCamera, cameraFrustumPlanes);
 
         m_MainCamera.farClipPlane = cameraOriginalFarPlane;//revert far plane edit
