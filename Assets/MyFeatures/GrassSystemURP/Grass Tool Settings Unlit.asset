@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ce6846e2bf1294c8b1f060b1ad0a62, type: 3}
+  m_Name: Grass Tool Settings Unlit
+  m_EditorClassIdentifier: 
+  shaderToUse: {fileID: 7200000, guid: c2c50063917f71c4b8b7ffa584ad2c3b, type: 3}
+  materialToUse: {fileID: 2100000, guid: b1c8716c12160bb4b9d0b27905d13364, type: 2}
+  grassRandomHeightMin: -0.6012124
+  grassRandomHeightMax: 0.24590087
+  bladeRadius: 0.45
+  bladeForwardAmount: 0.43
+  bladeCurveAmount: 1.58
+  bottomWidth: 0.39
+  MinWidth: 0.103
+  MinHeight: 0.083
+  MaxWidth: 0.445
+  MaxHeight: 1
+  windSpeed: -0.04
+  windStrength: 0.05
+  allowedBladesPerVertex: 8
+  allowedSegmentsPerBlade: 3
+  affectStrength: 1.33
+  topTint: {r: 0.6745098, g: 0.90196085, b: 0.5411765, a: 1}
+  bottomTint: {r: 0, g: 0, b: 0, a: 1}
+  minFadeDistance: 40
+  maxDrawDistance: 70
+  drawBounds: 1
+  cullingTreeDepth: 3
+  layerBlocking:
+  - 1
+  - 0.79
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  layerFading: 0001000000000000
+  VertexColorSettings: 0
+  VertexFade: 0
+  castShadow: 1
