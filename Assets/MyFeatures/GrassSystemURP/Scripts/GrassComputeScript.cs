@@ -369,8 +369,7 @@ public class GrassComputeScript : MonoBehaviour {
             Vector4[] positions = new Vector4[interactors.Length];
 
             for (int i = 0; i < interactors.Length; i++) {
-                positions[i] = new Vector4(interactors[i].transform.position.x, interactors[i].transform.position.y, interactors[i].transform.position.z,
-                interactors[i].radius);
+                positions[i] = new Vector4(interactors[i].transform.position.x, interactors[i].transform.position.y, interactors[i].transform.position.z,interactors[i].radius);
 
             }
             int shaderID = Shader.PropertyToID("_PositionsMoving");
@@ -387,7 +386,6 @@ public class GrassComputeScript : MonoBehaviour {
         }
 #endif
     }
-
 
     // draw the bounds gizmos
     void OnDrawGizmos() {

@@ -25,8 +25,9 @@ namespace SoFunny.Miles {
         [SerializeField] public Color topTint = Color.white;
         [SerializeField] public Color bottomTint = Color.blue;
         [SerializeField] public float minFadeDistance = 40;
-
         [SerializeField] public float maxDrawDistance = 125;
+        [SerializeField] public bool drawBounds;
         [SerializeField] public int cullingTreeDepth = 1;
+        [SerializeField] public UnityEngine.Rendering.ShadowCastingMode castShadow;
     }
 }
